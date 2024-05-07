@@ -1,0 +1,19 @@
+version: '3'
+services:
+  order-services:
+    build: ./
+    environment:
+       OTEL_TRACES_EXPORTER: "zipkin"
+       OTEL_EXPORTER_ZIPKIN_ENDPOINT: "http://zipkin:9411/api/v2/spans"
+       OTEL_METRICS_EXPORTER: "logging"
+       OTEL_LOGS_EXPORTER: "logging"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - zipkin-service
+
+  zipkin-service:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
